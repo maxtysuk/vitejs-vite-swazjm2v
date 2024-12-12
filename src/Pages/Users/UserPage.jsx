@@ -7,6 +7,8 @@ export default function UserPage() {
     const [error, setError] = useState(null);
 
     useEffect(() => {
+        console.log(`Fetching user with ID: ${id}`); // Логування ID
+
         fetch(`https://dummyjson.com/users/${id}`)
             .then((response) => {
                 if (!response.ok) {
@@ -15,6 +17,7 @@ export default function UserPage() {
                 return response.json();
             })
             .then((data) => {
+                console.log('User data fetched:', data); // Логування отриманих даних
                 if (data.id) {
                     setUser(data);
                 } else {
