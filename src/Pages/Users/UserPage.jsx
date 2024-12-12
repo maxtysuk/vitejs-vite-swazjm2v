@@ -4,44 +4,50 @@ import { useEffect, useState } from 'react';
 export default function UserPage() {
     const { id } = useParams();
     const [user, setUser] = useState(null);
+    const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        console.log(`Fetching user with ID: ${id}`); // Логування ID
-
-        fetch(`https://dummyjson.com/users/${id}`)
-            .then((response) => {
+        const fetchUser = async () => {
+            try {
+                const response = await fetch(`https://dummyjson.com/users/${id}`);
                 if (!response.ok) {
                     throw new Error(`HTTP error! Status: ${response.status}`);
                 }
-                return response.json();
-            })
-            .then((data) => {
-                console.log('User data fetched:', data); // Логування отриманих даних
-                if (data.id) {
-                    setUser(data);
-                } else {
-                    throw new Error('Invalid API response format');
+                const data = await response.json();
+                if (!data.id) {
+                    throw new Error('User not found');
                 }
-            })
-            .catch((error) => {
-                console.error('Error fetching user:', error);
-                setError(error.message);
-            });
+                setUser(data);
+            } catch (err) {
+                console.error('Error fetching user:', err);
+                setError(err.message);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchUser();
     }, [id]);
 
+    if (loading) return <div>Loading...</div>;
     if (error) return <div>Error: {error}</div>;
-    if (!user) return <div>Loading...</div>;
 
     return (
         <div className="Main user-page">
             <div>
                 <Link to="/users">Back</Link>
             </div>
-            <img src={user.image} alt="avatar" />
-            <h2>User: {user.firstName} {user.lastName}</h2>
-            <h2>Gender: {user.gender}</h2>
-            <h2>{user.email}</h2>
+            {user ? (
+                <>
+                    <img src={user.image} alt="avatar" />
+                    <h2>User: {user.firstName} {user.lastName}</h2>
+                    <h2>Gender: {user.gender}</h2>
+                    <h2>{user.email}</h2>
+                </>
+            ) : (
+                <div>User not found</div>
+            )}
         </div>
     );
 }
