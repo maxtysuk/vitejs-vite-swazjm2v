@@ -1,4 +1,4 @@
-import { Link, useLoaderData } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 
 export default function Users() {
@@ -6,7 +6,12 @@ export default function Users() {
 
     useEffect(() => {
         fetch('https://dummyjson.com/users')
-            .then((response) => response.json())
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                return response.json();
+            })
             .then((data) => setUsers(data.users))
             .catch((error) => console.error('Error fetching users:', error));
     }, []);
