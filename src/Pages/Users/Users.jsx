@@ -21,7 +21,6 @@ export default function Users() {
                 }
             })
             .catch((error) => {
-                console.error('Error fetching users:', error);
                 setError(error.message);
             });
     }, []);
