@@ -1,0 +1,15 @@
+.Header {
+    grid-area: head;
+    padding: 10px;
+    margin: 5px;
+    background: rgb(32, 35, 41) url('https://blog.codacy.com/hubfs/Imported_Blog_Media/react-1.jpeg') center;
+    height:150px;
+}
+
+.Header h1, .Header h3 {
+    color: rgb(236,236,236);
+}
+
+.Header img{
+    width: 10%;
+}
