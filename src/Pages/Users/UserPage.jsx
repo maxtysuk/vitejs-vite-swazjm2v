@@ -1,29 +1,27 @@
-import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useLoaderData } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 
-const UserPage = () => {
-  const { id } = useParams(); // Отримуємо ID з URL
-  const [user, setUser] = useState(null);
+export default function UserPage({ id }) {
+    const [user, setUser] = useState(null);
 
-  useEffect(() => {
-    fetch(`https://dummyjson.com/users/${id}`)
-      .then((res) => res.json())
-      .then((data) => setUser(data))
-      .catch((error) => console.error("Error fetching user data:", error));
-  }, [id]);
+    useEffect(() => {
+        fetch(`https://dummyjson.com/users/${id}`)
+            .then((response) => response.json())
+            .then((data) => setUser(data))
+            .catch((error) => console.error('Error fetching user:', error));
+    }, [id]);
 
-  if (!user) return <p>Loading...</p>;
+    if (!user) return <div>Loading...</div>;
 
-  return (
-    <div>
-      <h1>User Details</h1>
-      <p><strong>Name:</strong> {user.firstName} {user.lastName}</p>
-      <p><strong>Email:</strong> {user.email}</p>
-      <p><strong>Phone:</strong> {user.phone}</p>
-      <p><strong>Age:</strong> {user.age}</p>
-      <p><strong>Address:</strong> {user.address.city}, {user.address.state}</p>
-    </div>
-  );
-};
-
-export default UserPage;
+    return (
+        <div className="Main user-page">
+            <div>
+                <Link to="/users">Back</Link>
+            </div>
+            <img src={user.image} alt="avatar" />
+            <h2>User: {user.firstName} {user.lastName}</h2>
+            <h2>Gender: {user.gender}</h2>
+            <h2>{user.email}</h2>
+        </div>
+    );
+}
