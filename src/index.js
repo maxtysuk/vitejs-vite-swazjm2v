@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, createRoutesFromElements, RouterProvider, Route, Outlet } from 'react-router-dom';
-
 import Header from './Pages/Header/Header';
 import Sidebar from './Pages/Sidebar/Sidebar';
 import Welcome from './Pages/Welcome/Welcome';
@@ -12,6 +11,31 @@ import UserPage from './Pages/Users/UserPage';
 import './global.css';
 import ErrorPage from './Pages/Error/Error';
 
+async function loader({ params }) {
+    try {
+        const response = await fetch(`https://dummyjson.com/users/${params.userId}`);
+        if (!response.ok) {
+            throw new Error(`Failed to fetch user data: ${response.status}`);
+        }
+        const user = await response.json();
+
+        // Фільтруємо лише необхідні поля
+        const filteredUser = {
+            id: user.id,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            gender: user.gender,
+            email: user.email,
+            image: user.image,
+        };
+
+        return filteredUser; // Повертаємо лише фільтровані дані
+    } catch (error) {
+        console.error(error);
+        throw new Response("User not found", { status: 404 });
+    }
+}
+
 const Root = () => {
     return (
         <div className='container'>
@@ -21,19 +45,6 @@ const Root = () => {
         </div>
     );
 };
-
-async function loader({ params }) {
-    try {
-        const response = await fetch(`https://dummyjson.com/users/${params.userId}`);
-        if (!response.ok) {
-            throw new Error(`Failed to fetch user data: ${response.status}`);
-        }
-        return response.json();
-    } catch (error) {
-        console.error(error);
-        throw new Response("User not found", { status: 404 });
-    }
-}
 
 const router = createBrowserRouter(
     createRoutesFromElements(
