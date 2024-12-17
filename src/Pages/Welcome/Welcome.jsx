@@ -7,20 +7,18 @@ function Welcome() {
     const [showModal, setShowModal] = useState(false);
     const [error, setError] = useState('');
 
-    // Обробник зміни поля вводу
     const handleInputChange = (e) => {
         setInputValue(e.target.value);
         setError('');
     };
 
-    // Обробник форми
     const handleSubmit = (e) => {
         e.preventDefault();
         if (inputValue.trim() === '') {
             setError('Name cannot be empty');
         } else {
             setName(inputValue.trim());
-            setShowModal(true); // Показати модальне вікно
+            setShowModal(true);
             setInputValue('');
         }
     };
@@ -38,7 +36,6 @@ function Welcome() {
                 that you can be a part of; see the other pages in this section for additional online and in-person learning materials.
             </p>
 
-            {/* Форма реєстрації */}
             <form onSubmit={handleSubmit} className="registration-form">
                 <label>
                     Enter your name:
@@ -53,7 +50,6 @@ function Welcome() {
                 {error && <p className="error">{error}</p>}
             </form>
 
-            {/* Модальне вікно */}
             {showModal && (
                 <div className="modal">
                     <div className="modal-content">
@@ -64,7 +60,6 @@ function Welcome() {
                 </div>
             )}
 
-            {/* Відображення імені користувача після реєстрації */}
             {name && (
                 <div className="greeting">
                     <h3>Hello, {name}! 👋</h3>
